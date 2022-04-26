@@ -3,28 +3,36 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors; 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 class TCPServer {
-  
-  //Stores clients created 
+  //Variables to handle multiple clients
   private static ArrayList<ClientHandler> clients = new ArrayList<>();
-  //Thread pool
-  private static ExecutorService pool = Executors.newFixedThreadPool(4);
+  private static ExecutorService pool = Executors.newFixedThreadPool(5);
 
   public static void main(String argv[]) throws IOException { 
       //Create socket for any incoming requests 
       ServerSocket serverSocket = new ServerSocket(5000); 
-      
+  
       //Loop that accepts multiple connections
       while(true){
-        //Connection made 
+
+        //Connection waiting and made
         System.out.println("[SERVER] Waiting for client connection...");
         Socket connectionSocket = serverSocket.accept();
-        System.out.println("[SERVER] Connected to Client!");
 
+        //Clients name and when they joined
+        String hostName = connectionSocket.getInetAddress().getHostName();
+        LocalDateTime mydatetime = LocalDateTime.now();
+        DateTimeFormatter myformat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        String myformatteddatetime = mydatetime.format(myformat);
+
+        System.out.println("[SERVER] Connected to Client: " + hostName + " at " + myformatteddatetime + "!");
+
+        //handles multiple clients
         ClientHandler clientThread = new ClientHandler(connectionSocket);
         clients.add(clientThread);
-        
         pool.execute(clientThread);
       }
   } 
