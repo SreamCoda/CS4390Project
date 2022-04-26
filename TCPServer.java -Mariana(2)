@@ -1,0 +1,35 @@
+import java.io.*; 
+import java.net.*;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors; 
+
+class TCPServer {
+  
+  //Stores clients created 
+  private static ArrayList<ClientHandler> clients = new ArrayList<>();
+  //Thread pool
+  private static ExecutorService pool = Executors.newFixedThreadPool(4);
+
+  public static void main(String argv[]) throws IOException { 
+      //Create socket for any incoming requests 
+      ServerSocket serverSocket = new ServerSocket(5000); 
+      
+      //Loop that accepts multiple connections
+      while(true){
+        //Connection made 
+        System.out.println("[SERVER] Waiting for client connection...");
+        Socket connectionSocket = serverSocket.accept();
+        System.out.println("[SERVER] Connected to Client!");
+
+        ClientHandler clientThread = new ClientHandler(connectionSocket);
+        clients.add(clientThread);
+        
+        pool.execute(clientThread);
+      }
+
+  } 
+} 
+ 
+
+           
