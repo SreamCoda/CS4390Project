@@ -1,0 +1,44 @@
+import java.io.*; 
+import java.net.*; 
+
+class TCPClient { 
+    public static void main(String argv[]) throws IOException 
+    { 
+        String equation; 
+        String answer; 
+
+        //Create the socket
+        Socket clientSocket = new Socket("127.0.0.1", 5000);
+
+        //Input stream 
+        BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in)); 
+        
+        //Output stream   
+        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+        
+        //Input stream attached to server socket
+        BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())); 
+
+
+        //While loop to continue interaction with the server
+        while(true){
+          System.out.println("Please input your basic equation."  + "\n> ");
+          equation = inFromUser.readLine(); 
+
+          //Command to close client connection to server
+          if (equation.equals("stop") || equation.equals("Stop")) break;
+
+          //Sending equation to the server as a string 
+          out.println(equation.toString()); 
+
+          //Read the answer from the server
+          answer = inFromServer.readLine(); 
+              System.out.println("ANSWER FROM SERVER: " + answer); 
+        }
+            
+        //closing resources
+        clientSocket.close();
+        System.exit(0);
+             
+          } 
+      } 
