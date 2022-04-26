@@ -2,8 +2,7 @@ import java.io.*;
 import java.net.*; 
 
 class TCPClient { 
-    public static void main(String argv[]) throws IOException 
-    { 
+    public static void main(String argv[]) throws IOException { 
         String equation; 
         String answer; 
 
@@ -40,5 +39,5 @@ class TCPClient {
         clientSocket.close();
         System.exit(0);
              
-          } 
-      } 
+    } 
+} 
