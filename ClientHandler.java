@@ -9,7 +9,7 @@ public class ClientHandler implements Runnable {
     public ClientHandler(Socket clientSocket) throws IOException{
         this.client = clientSocket;
         in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+        out = new PrintWriter(client.getOutputStream(), true);
     }
 
     @Override
